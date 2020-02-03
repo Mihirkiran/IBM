@@ -13,8 +13,7 @@ class NumberInc{
  			int value1 = n%10;
  			n = n/10;
  			int value2 = n%10;
- 			n = n/10;
-			if(value1 > value2){
+			if(value1 >= value2){
 			 	flag = 1;
 			}
 			else{
