@@ -7,9 +7,18 @@
 <title>Withdraw</title>
 </head>
 <body>
+	<%
+		if (session.getAttribute("ID") == null) {
+			response.sendRedirect("index.jsp");
+			//System.out.println("AA");
+		} else {
+	%>
 	<form action="Withdraw">
 		Enter Amount:<input type="text" name="amount"><br>
 		<input type="submit" name="submit" value="submit">
 	</form>
+	<%
+		}
+	%>
 </body>
 </html>

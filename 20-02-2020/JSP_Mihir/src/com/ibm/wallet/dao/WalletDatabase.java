@@ -177,24 +177,22 @@ public class WalletDatabase implements WalletDatabaseInterface{
 	}
 	@Override
 	public boolean validate(Customer cust) {
-		String p ="";
-		String selectQry = "select * from userdetails where userID = ?";
+//		String p ="";
+		String selectQry = "select * from userdetails where userID = ? and password = ?";
         boolean flag = false;
 		ResultSet rs;
 		try {
 			PreparedStatement stmt = dbCon.prepareStatement(selectQry);
 			stmt.setString(1, cust.getUserID());
+			stmt.setString(2, cust.getPassword());
 			rs = stmt.executeQuery();
 			if(rs.next()) {
-	        	p = rs.getString("password"); 
+				flag = true;; 
 	        }
 		} catch (SQLException e) {
 			flag = false;
 		} 
 
-        if(cust.getPassword().equals(p)){  
-        	flag = true;
-        } 
 		return flag;
 	}
 

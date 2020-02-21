@@ -21,6 +21,11 @@ public class ValidateUser extends HttpServlet {
 		WalletDatabase wd = new WalletDatabase();
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
+//		if(userID.length() > 30 || password.length() > 30) {
+//			out.print("Invalid User ID or Password!!!<br>");
+//			response.setContentType("text/html");
+//            request.getRequestDispatcher("LoginWallet.jsp").include(request, response);  
+//		}
 		Customer cust = new Customer();
 		cust.setUserID(userID);
 		cust.setPassword(password);
@@ -32,6 +37,7 @@ public class ValidateUser extends HttpServlet {
 		}
 		else {
 			out.print("Invalid User ID or Password!!!<br>");
+			response.setContentType("text/html");
             request.getRequestDispatcher("LoginWallet.jsp").include(request, response);  
 		}
 	}
