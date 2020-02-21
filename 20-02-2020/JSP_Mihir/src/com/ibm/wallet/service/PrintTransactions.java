@@ -22,29 +22,34 @@ public class PrintTransactions extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		WalletDatabase wd = new WalletDatabase();
 		Customer cust = new Customer();
-		HttpSession session = request.getSession();
-		cust.setUserID((session.getAttribute("ID")).toString());
-		ResultSet rs = wd.printTransaction((session.getAttribute("ID")).toString());
-        request.getRequestDispatcher("dashboardjsp.jsp").include(request, response);  
-
-		try {
-			if(rs.next()) {
-				out.println("From: " + rs.getString("fromUserID") + " "
-						+ "To: " + rs.getString("toUserID") + " "
-								+ "Amount: " + rs.getInt("amount") + " "
-										+ "Time: " + rs.getString("transactionTime") + "<br>");
-				while(rs.next()) {
+		if (request.getSession(false).getAttribute("ID") == null) {
+			response.sendRedirect("index.jsp");
+			//System.out.println("AA");
+		} else {
+			HttpSession session = request.getSession();
+			cust.setUserID((session.getAttribute("ID")).toString());
+			ResultSet rs = wd.printTransaction((session.getAttribute("ID")).toString());
+	        request.getRequestDispatcher("dashboardjsp.jsp").include(request, response);  
+	
+			try {
+				if(rs.next()) {
 					out.println("From: " + rs.getString("fromUserID") + " "
 							+ "To: " + rs.getString("toUserID") + " "
 									+ "Amount: " + rs.getInt("amount") + " "
 											+ "Time: " + rs.getString("transactionTime") + "<br>");
+					while(rs.next()) {
+						out.println("From: " + rs.getString("fromUserID") + " "
+								+ "To: " + rs.getString("toUserID") + " "
+										+ "Amount: " + rs.getInt("amount") + " "
+												+ "Time: " + rs.getString("transactionTime") + "<br>");
+					}
 				}
+				else {
+					out.println("No transaction history");
+				}
+			} catch (SQLException e) {
+				out.println("Error!!!");
 			}
-			else {
-				out.println("No transaction history");
-			}
-		} catch (SQLException e) {
-			out.println("Error!!!");
 		}
 	}
 }

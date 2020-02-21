@@ -17,14 +17,19 @@ import com.ibm.wallet.dao.WalletDatabase;
 public class CheckBalance extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		WalletDatabase wd = new WalletDatabase();
-		Customer cust = new Customer();
-		HttpSession session = request.getSession();
-		cust.setUserID((session.getAttribute("ID")).toString());
-		int bal = wd.getBalance(cust);
-		response.setContentType("text/html");
-        request.getRequestDispatcher("dashboardjsp.jsp").include(request, response);  
-		out.print("Balance is: " + bal);
+		if (request.getSession(false).getAttribute("ID") == null) {
+			response.sendRedirect("index.jsp");
+			//System.out.println("AA");
+		} else {
+			PrintWriter out = response.getWriter();
+			WalletDatabase wd = new WalletDatabase();
+			Customer cust = new Customer();
+			HttpSession session = request.getSession();
+			cust.setUserID((session.getAttribute("ID")).toString());
+			int bal = wd.getBalance(cust);
+			response.setContentType("text/html");
+	        request.getRequestDispatcher("dashboardjsp.jsp").include(request, response);  
+			out.print("Balance is: " + bal);
+		}
 	}
 }
