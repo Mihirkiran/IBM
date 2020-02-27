@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import com.ibm.wallet.bean.Customer;
 import com.ibm.wallet.bean.Transaction;
 import com.ibm.wallet.dao.WalletDatabase;
 
-@Service
+@Service("ws")
 public class WalletService {
-    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
-	WalletDatabase wd = context.getBean("WalletDatabase", WalletDatabase.class);
+//    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
+	
+	@Autowired
+	WalletDatabase wd;
 	public boolean createAccount(Customer cust) throws SQLException {
 		boolean flag = wd.createAccount(cust);
 		return flag;

@@ -2,7 +2,7 @@ package com.ibm.wallet.bean;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("cust")
 public class Customer {
 	
 	int balance;

@@ -21,12 +21,18 @@ import com.ibm.wallet.bean.Customer;
 import com.ibm.wallet.bean.Transaction;
 import com.ibm.wallet.service.WalletService;
 
-@Repository
+@Repository("wd")
 public class WalletDatabase {
 	
 	DataSource dataSource;
 	NamedParameterJdbcTemplate namedParam;
-    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
+//    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
+	
+	@Autowired
+	Transaction tran;
+	
+	@Autowired
+	WalletService ws;
 	
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
@@ -80,7 +86,7 @@ public class WalletDatabase {
 		}
 	}
 	public boolean fundTransfer(Customer fromUserID, Customer toUserID, int amt, String date) throws BeansException, SQLException {
-		boolean b = context.getBean("WalletService", WalletService.class).withdraw(amt, fromUserID);
+		boolean b = ws.withdraw(amt, fromUserID);
 		if(b == true) {
 			try {
 				boolean f = deposit(amt, toUserID);
@@ -111,7 +117,6 @@ public class WalletDatabase {
 	}
 	class UserMapper implements RowMapper<Transaction>{
 		public Transaction mapRow(ResultSet rs, int rowNum) throws SQLException{
-			Transaction tran = context.getBean("Transaction", Transaction.class);
 			tran.setFromUserID(rs.getString("fromUserID"));
 			tran.setToUserID(rs.getString("toUserID"));
 			tran.setAmount(rs.getInt("amount"));

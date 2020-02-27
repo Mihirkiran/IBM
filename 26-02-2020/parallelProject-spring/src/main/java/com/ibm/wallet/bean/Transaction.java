@@ -2,7 +2,7 @@ package com.ibm.wallet.bean;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("tran")
 public class Transaction {
 	String fromUserID, toUserID, transactionTime;
 	int amount;

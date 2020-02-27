@@ -17,16 +17,34 @@
 		<property name="driverClassName"
 			value="com.mysql.cj.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://localhost:3306/wallet"></property>
+			value="jdbc:mysql://localhost:3306/wallet?serverTimezone=IST"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value=""></property>
 	</bean>
+	
+<!-- 	<bean id = "ui" class = "com.ibm.wallet.ui.UI"> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id = "cust" class = "com.ibm.wallet.bean.Customer"> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id = "ws" class = "com.ibm.wallet.service.WalletService"> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id = "wd" class = "com.ibm.wallet.dao.WalletDatabase"> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id = "tran" class = "com.ibm.wallet.bean.Tranasaction"> -->
+<!-- 	</bean> -->
 
 	<!-- Allow Annotations to work -->
 	<context:annotation-config></context:annotation-config>
 
 	<!-- Allow the Components to be scannable -->
-	<context:component-scan
-		base-package="com.ibm.training"></context:component-scan>
+	<context:component-scan base-package="com.ibm.parallelProject_spring"></context:component-scan>
+	<context:component-scan base-package="com.ibm.wallet.bean"></context:component-scan>
+	<context:component-scan base-package="com.ibm.wallet.dao"></context:component-scan>
+	<context:component-scan base-package="com.ibm.wallet.service"></context:component-scan>
+	<context:component-scan base-package="com.ibm.wallet.ui"></context:component-scan>
 
 </beans>
