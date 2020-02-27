@@ -46,7 +46,7 @@ public class WalletService {
 		}
 		return b;
 	}
-	public boolean fundTransfer(Customer fromUserID, Customer toUserID, int amt, Date date) throws BeansException, SQLException {
+	public boolean fundTransfer(Customer fromUserID, String toUserID, int amt, Date date) throws BeansException, SQLException {
 		String pattern = "MM/dd/yyyy HH:mm:ss";
 
 		DateFormat df = new SimpleDateFormat(pattern);

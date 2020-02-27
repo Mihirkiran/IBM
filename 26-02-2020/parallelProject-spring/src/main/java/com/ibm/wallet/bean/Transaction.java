@@ -30,4 +30,12 @@ public class Transaction {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+	
+	public String toString(){
+		return "From: " + getFromUserID() 
+				+ "To: " + getToUserID() 
+				+ "Amount: " + getAmount()
+				+ "Time: " + getTransactionTime() + "\n";
+				
+	}
 }

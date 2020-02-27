@@ -146,8 +146,10 @@ public class UI {
 //					cust = context.getBean("Customer", Customer.class);
 //					Customer custRecieve = context.getBean("Customer", Customer.class);
 					cust.setUserID(fromUserID);
-					custRecieve.setUserID(toUserID);
-					flag = ws.fundTransfer(cust, custRecieve, amt, date);
+//					custRecieve.setUserID(toUserID);
+//					System.out.println(cust.getUserID());
+//					System.out.println(custRecieve.getUserID());
+					flag = ws.fundTransfer(cust, toUserID, amt, date);
 					if(flag == true)
 						System.out.println(amt + " transferred to recipient!!!");
 					else
@@ -167,7 +169,8 @@ public class UI {
 						System.out.println("No Transaction History!!!");
 					}
 					else {
-						System.out.println(lst);	
+						System.out.println(lst);
+						break;
 					}
 					
 					break;

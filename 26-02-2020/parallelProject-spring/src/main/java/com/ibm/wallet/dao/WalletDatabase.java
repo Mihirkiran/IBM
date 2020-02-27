@@ -28,8 +28,8 @@ public class WalletDatabase {
 	NamedParameterJdbcTemplate namedParam;
 //    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
 	
-	@Autowired
-	Transaction tran;
+//	@Autowired
+//	Transaction tran;
 	
 	@Autowired
 	WalletService ws;
@@ -64,7 +64,7 @@ public class WalletDatabase {
 	public boolean deposit(int amt, Customer cust) throws SQLException {
 		String updateQry = "UPDATE userdetails SET balance=:balance WHERE userID=:userID";
 
-		int a = namedParam.update(updateQry, new MapSqlParameterSource("userID", cust.getUserID()).addValue("balance", cust.getBalance() + amt));
+		int a = namedParam.update(updateQry, new MapSqlParameterSource("userID", cust.getUserID()).addValue("balance", getBalance(cust) + amt));
 
 		if(a == 0) {
 			return false;
@@ -76,7 +76,7 @@ public class WalletDatabase {
 	public boolean withdraw(int amt, Customer cust) throws SQLException {
 		String updateQry = "UPDATE userdetails SET balance=:balance WHERE userID=:userID";
 
-		int a = namedParam.update(updateQry, new MapSqlParameterSource("userID", cust.getUserID()).addValue("balance", cust.getBalance() - amt));
+		int a = namedParam.update(updateQry, new MapSqlParameterSource("userID", cust.getUserID()).addValue("balance", getBalance(cust) - amt));
 
 		if(a == 0) {
 			return false;
@@ -85,17 +85,26 @@ public class WalletDatabase {
 			return true;
 		}
 	}
-	public boolean fundTransfer(Customer fromUserID, Customer toUserID, int amt, String date) throws BeansException, SQLException {
-		boolean b = ws.withdraw(amt, fromUserID);
+	public boolean fundTransfer(Customer fromUserID, String toUserID, int amt, String date) throws BeansException, SQLException {
+		boolean b = false;
+		if(amt <= getBalance(fromUserID)) {
+			
+			b = withdraw(amt, fromUserID);
+		}
+		else {
+			return false;
+		}
 		if(b == true) {
+			Customer c1 = new Customer();
+			c1.setUserID(toUserID);
 			try {
-				boolean f = deposit(amt, toUserID);
+				boolean f = deposit(amt, c1);
 				if(f == false) {
 					deposit(amt, fromUserID);
 					return false;
 				}
-				String insertQry = "INSERT INTO transactiondetails values (:fromUserID, :toUserID, :amount, :transactionTime)";
-				namedParam.update(insertQry, new MapSqlParameterSource("fromUserID", fromUserID.getUserID()).addValue("toUserID", toUserID.getUserID()).addValue("amount", amt).addValue("transactionTime", date));
+				String insertQry = "INSERT INTO transactiondetails(fromUserID, toUserID, amount, transactionTime) values (:fromUserID, :toUserID, :amount, :transactionTime)";
+				namedParam.update(insertQry, new MapSqlParameterSource("fromUserID", fromUserID.getUserID()).addValue("toUserID", toUserID).addValue("amount", amt).addValue("transactionTime", date));
 
 				return true;
 			} catch (SQLException e) {
@@ -117,6 +126,7 @@ public class WalletDatabase {
 	}
 	class UserMapper implements RowMapper<Transaction>{
 		public Transaction mapRow(ResultSet rs, int rowNum) throws SQLException{
+			Transaction tran = new Transaction();
 			tran.setFromUserID(rs.getString("fromUserID"));
 			tran.setToUserID(rs.getString("toUserID"));
 			tran.setAmount(rs.getInt("amount"));
